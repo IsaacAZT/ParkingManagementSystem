@@ -18,6 +18,9 @@ namespace ParkingManagementSystem
             CurrentVehicles = new List<Vehicle>();
         }
 
+
+        public decimal HourlyRate { get; set; } = 2.00m;
+
         // Basic method to register entry (Stage 2)
         public void AddVehicle(Vehicle v)
         {
@@ -29,6 +32,35 @@ namespace ParkingManagementSystem
             else
             {
                 Console.WriteLine("Parking lot is full.");
+            }
+        }
+        public void RemoveVehicle(string plate)
+        {
+            // 1. Search for the vehicle by license plate
+            var vehicle = CurrentVehicles.Find(v => v.LicensePlate == plate);
+
+            if (vehicle != null)
+            {
+                // 2. Calculate the time elapsed
+                // We subtract EntryTime from the current time
+                TimeSpan duration = DateTime.Now - vehicle.EntryTime;
+
+                // 3. Calculate the total cost
+                // We use TotalMinutes for easier testing
+                decimal totalToPay = (decimal)duration.TotalMinutes * HourlyRate;
+
+                // 4. Free up the space
+                CurrentVehicles.Remove(vehicle);
+
+                Console.WriteLine($"\n--- Exit Receipt ---");
+                Console.WriteLine($"Plate: {vehicle.LicensePlate}");
+                Console.WriteLine($"Time Parked: {duration.Minutes} minutes");
+                Console.WriteLine($"Total to Pay: ${totalToPay:F2}");
+                Console.WriteLine($"--------------------");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Vehicle with plate {plate} not found.");
             }
         }
     }

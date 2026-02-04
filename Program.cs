@@ -6,22 +6,44 @@ namespace ParkingManagementSystem
     {
         static void Main(string[] args)
         {
-            // 1. We create the parking object with 10 spaces
+            // 1. Initialize our parking with a capacity of 10
             Parking myParking = new Parking(10);
+            bool exit = false;
 
-            // 2. We create a new vehicle object
-            Vehicle myCar = new Vehicle("ABC-123");
+            while (!exit)
+            {
+                Console.WriteLine("\n--- Parking Management System ---");
+                Console.WriteLine("1. Enter Vehicle");
+                Console.WriteLine("2. Exit Vehicle (Checkout)");
+                Console.WriteLine("3. Exit Program");
+                Console.Write("Select an option: ");
 
-            // 3. We call the method to add the vehicle
-            Console.WriteLine("--- Simulation Started ---");
-            myParking.AddVehicle(myCar);
+                string option = Console.ReadLine()??"";
 
-            // 4. We check if it was added to the list
-            Console.WriteLine($"Vehicles currently in parking: {myParking.CurrentVehicles.Count}");
+                switch (option)
+                {
+                    case "1":
+                        Console.Write("Enter license plate: ");
+                        string plateIn = Console.ReadLine() ?? "";
+                        Vehicle newVehicle = new Vehicle(plateIn);
+                        myParking.AddVehicle(newVehicle);
+                        break;
 
-            // Wait for user to press a key before closing
-            Console.WriteLine("\nPress any key to exit...");
-            Console.ReadKey();
+                    case "2":
+                        Console.Write("Enter license plate to exit: ");
+                        string plateOut = Console.ReadLine() ?? "";
+                        myParking.RemoveVehicle(plateOut);
+                        break;
+
+                    case "3":
+                        exit = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        break;
+                }
+            }
         }
     }
 }
